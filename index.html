@@ -5141,6 +5141,64 @@
 
         // 页面加载完成后初始化
         window.addEventListener('DOMContentLoaded', initApp);
+
+        // 与上面函数配合的界面操作函数示例
+        async function refreshDisplay() {
+            const data = await loadSharedJson();
+            if (data) {
+                document.getElementById('json-display').textContent = 
+                    JSON.stringify(data.json_data, null, 2);
+                document.getElementById('json-edit').value = 
+                    JSON.stringify(data.json_data, null, 2);
+            }
+        }
+
+        async function addNewNote() {
+            const data = await loadSharedJson();
+            const newNote = {
+                id: Date.now(),
+                content: prompt('请输入笔记内容：'),
+                time: new Date().toLocaleString()
+            };
+            
+            // 更新 notes 数组
+            const updatedNotes = [...(data.json_data.notes || []), newNote];
+            await updateJsonField('notes', updatedNotes);
+            refreshDisplay();
+        }
+
+        async function incrementCounter() {
+            const data = await loadSharedJson();
+            const current = data.json_data.counters?.count || 0;
+            await updateJsonField('counters.count', current + 1);
+            refreshDisplay();
+        }
+
+        async function resetData() {
+            if (confirm('确定要重置所有数据吗？')) {
+                await createInitialJson();
+                refreshDisplay();
+            }
+        }
+
+        async function saveManualEdit() {
+            try {
+                const newJson = JSON.parse(document.getElementById('json-edit').value);
+                await updateEntireJson(newJson);
+                alert('保存成功！');
+            } catch(e) {
+                alert('JSON格式错误：' + e.message);
+            }
+        }
+
+        // 修改onDataChanged函数以刷新显示
+        function onDataChanged(newData) {
+            document.getElementById('json-display').textContent = 
+                JSON.stringify(newData, null, 2);
+            document.getElementById('json-edit').value = 
+                JSON.stringify(newData, null, 2);
+            // 可以添加更友好的提示，比如一个淡入淡出的"数据已更新"提示条
+        }
     </script>
 
     <!-- 多终端共享JSON数据实验界面 -->
@@ -5179,72 +5237,9 @@
             </div>
         </div>
     </div>
-
-    <script>
-    // 与上面函数配合的界面操作函数示例
-    async function refreshDisplay() {
-        const data = await loadSharedJson();
-        if (data) {
-            document.getElementById('json-display').textContent = 
-                JSON.stringify(data.json_data, null, 2);
-            document.getElementById('json-edit').value = 
-                JSON.stringify(data.json_data, null, 2);
-        }
-    }
-
-    async function addNewNote() {
-        const data = await loadSharedJson();
-        const newNote = {
-            id: Date.now(),
-            content: prompt('请输入笔记内容：'),
-            time: new Date().toLocaleString()
-        };
-        
-        // 更新 notes 数组
-        const updatedNotes = [...(data.json_data.notes || []), newNote];
-        await updateJsonField('notes', updatedNotes);
-        refreshDisplay();
-    }
-
-    async function incrementCounter() {
-        const data = await loadSharedJson();
-        const current = data.json_data.counters?.count || 0;
-        await updateJsonField('counters.count', current + 1);
-        refreshDisplay();
-    }
-
-    async function resetData() {
-        if (confirm('确定要重置所有数据吗？')) {
-            await createInitialJson();
-            refreshDisplay();
-        }
-    }
-
-    async function saveManualEdit() {
-        try {
-            const newJson = JSON.parse(document.getElementById('json-edit').value);
-            await updateEntireJson(newJson);
-            alert('保存成功！');
-        } catch(e) {
-            alert('JSON格式错误：' + e.message);
-        }
-    }
-
-    // 修改onDataChanged函数以刷新显示
-    function onDataChanged(newData) {
-        document.getElementById('json-display').textContent = 
-            JSON.stringify(newData, null, 2);
-        document.getElementById('json-edit').value = 
-            JSON.stringify(newData, null, 2);
-        // 可以添加更友好的提示，比如一个淡入淡出的"数据已更新"提示条
-    }
-
-    // 初始化显示
-    refreshDisplay();
-    </script>
         
         <div class="fixed bottom-4 right-4 bg-white bg-opacity-80 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-gray-600 shadow-sm border border-gray-200">
-            版本号: v305
+            版本号: v307
         </div>
     
 </body><!-- 版本号显示 --></html>
