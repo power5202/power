@@ -5121,17 +5121,35 @@
          * 7. 页面初始化
          */
         async function initApp() {
-            // 加载初始数据
-            const data = await loadSharedJson();
-            if (data) {
-                console.log('当前共享数据:', data.json_data);
-                // 在这里初始化你的页面，将数据显示出来
-                // renderData(data.json_data);
+            try {
+                // 加载初始数据
+                const data = await loadSharedJson();
+                if (data) {
+                    console.log('当前共享数据:', data.json_data);
+                    // 初始化页面显示
+                    refreshDisplay();
+                } else {
+                    console.log('未加载到共享数据，使用默认数据');
+                    document.getElementById('json-display').textContent = JSON.stringify({
+                        notes: [],
+                        counters: { count: 0 },
+                        settings: { theme: 'light' }
+                    }, null, 2);
+                    document.getElementById('json-edit').value = JSON.stringify({
+                        notes: [],
+                        counters: { count: 0 },
+                        settings: { theme: 'light' }
+                    }, null, 2);
+                }
+                
+                // 启动实时监听
+                setupRealtimeListener();
+                console.log('实时监听已启动，任何终端的数据变更都会同步到此页面。');
+            } catch (error) {
+                console.error('初始化失败:', error);
+                // 显示错误信息但不阻止页面使用
+                document.getElementById('json-display').textContent = '初始化失败: ' + error.message;
             }
-            
-            // 启动实时监听
-            setupRealtimeListener();
-            console.log('实时监听已启动，任何终端的数据变更都会同步到此页面。');
         }
 
         // 页面加载完成后初始化
@@ -5234,7 +5252,7 @@
     </div>
         
         <div class="fixed bottom-4 right-4 bg-white bg-opacity-80 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-gray-600 shadow-sm border border-gray-200">
-            版本号: v309
+            版本号: v311
         </div>
     
 </body><!-- 版本号显示 --></html>
