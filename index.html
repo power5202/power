@@ -4975,12 +4975,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('应用初始化...');
             
-            // 创建应用实例
-            window.app = new BudgetApp();
-            
-            // 绑定全局事件
-            window.app.bindGlobalEvents();
-            
+            // 应用已经通过initApp函数初始化
             console.log('应用初始化完成');
         });
     </script>
@@ -5239,7 +5234,7 @@
     </div>
         
         <div class="fixed bottom-4 right-4 bg-white bg-opacity-80 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-gray-600 shadow-sm border border-gray-200">
-            版本号: v307
+            版本号: v309
         </div>
     
 </body><!-- 版本号显示 --></html>
