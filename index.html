@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新房家具家电购买清单</title>
@@ -22,6 +20,7 @@
         /* 标记过渡动画 */
         .floor-plan-marker {
             transition: all 0.2s ease;
+            font-size: 8px;
         }
     </style>
     
@@ -196,9 +195,14 @@
                 <div class="card mb-6">
                     <div class="card-header flex justify-between items-center">
                         <h2 class="text-lg font-semibold text-gray-800">标签</h2>
-                        <button id="add-tag-btn" class="text-primary hover:text-blue-700">
-                            <i class="fa fa-plus"></i>
-                        </button>
+                        <div class="flex items-center space-x-2">
+                            <button id="delete-tag-btn" class="text-red-500 hover:text-red-700" title="删除标签">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <button id="add-tag-btn" class="text-primary hover:text-blue-700" title="添加标签">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div id="tags-list" class="flex flex-wrap gap-2">
@@ -210,7 +214,7 @@
                 <!-- 统计信息 -->
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="text-lg font-semibold text-gray-800">预算统计</h2>
+                        <h2 class="text-lg font-semibold text-gray-800">已有商品预算统计</h2>
                     </div>
                     <div class="card-body space-y-4">
                         <div>
@@ -255,13 +259,13 @@
                 <!-- 工具栏 -->
                 <div class="bg-white rounded-lg shadow-sm p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
                     <div class="flex items-center space-x-4">
-                        <div class="relative">
-                            <input type="text" id="search-input" class="input-field pl-10" placeholder="搜索商品...">
+                        <div class="relative w-full md:w-64">
+                            <input type="text" id="search-input" class="input-field pl-10 w-full" placeholder="搜索商品...">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fa fa-search text-gray-400"></i>
                             </div>
                         </div>
-                        <select id="sort-select" class="input-field">
+                        <select id="sort-select" class="input-field w-full md:w-48">
                             <option value="name-asc">名称 (A-Z)</option>
                             <option value="name-desc">名称 (Z-A)</option>
                             <option value="budget-asc">预算 (低-高)</option>
@@ -280,6 +284,10 @@
                         <button id="platform-analysis-btn" class="btn btn-sm btn-primary flex items-center space-x-1">
                             <i class="fa fa-shopping-bag"></i>
                             <span>平台价格统计</span>
+                        </button>
+                        <button id="time-analysis-btn" class="btn btn-sm btn-success flex items-center space-x-1">
+                            <i class="fa fa-calendar"></i>
+                            <span>时间花费统计</span>
                         </button>
                         <div class="relative">
                             <button id="import-export-btn" class="btn btn-sm btn-secondary flex items-center space-x-1">
@@ -335,11 +343,11 @@
             <form id="add-category-form" class="space-y-4">
                 <div>
                     <label for="category-name" class="block text-sm font-medium text-gray-700 mb-1">分类名称</label>
-                    <input type="text" id="category-name" class="input-field" required>
+                    <input type="text" id="category-name" class="input-field" required="">
                 </div>
                 <div>
                     <label for="category-budget" class="block text-sm font-medium text-gray-700 mb-1">预算金额</label>
-                    <input type="number" id="category-budget" class="input-field" min="0" step="0.01" required>
+                    <input type="number" id="category-budget" class="input-field" min="0" step="0.01" required="">
                 </div>
                 <div class="flex justify-end space-x-3 pt-2">
                     <button type="button" class="btn btn-secondary close-modal">取消</button>
@@ -361,22 +369,29 @@
             <form id="add-item-form" class="space-y-4">
                 <div>
                     <label for="add-item-category" class="block text-sm font-medium text-gray-700 mb-1">所属分类</label>
-                    <select id="add-item-category" class="input-field" required>
+                    <select id="add-item-category" class="input-field" required="">
                         <!-- 分类选项将通过JS动态生成 -->
                         <option value="">请选择分类</option>
                     </select>
                 </div>
                 <div>
                     <label for="add-item-name" class="block text-sm font-medium text-gray-700 mb-1">商品名称</label>
-                    <input type="text" id="add-item-name" class="input-field" required>
+                    <input type="text" id="add-item-name" class="input-field" required="">
                 </div>
                 <div>
                     <label for="add-item-budget" class="block text-sm font-medium text-gray-700 mb-1">预算金额</label>
-                    <input type="number" id="add-item-budget" class="input-field" min="0" step="0.01" required>
+                    <input type="number" id="add-item-budget" class="input-field" min="0" step="0.01" required="">
                 </div>
                 <div>
                     <label for="add-item-price" class="block text-sm font-medium text-gray-700 mb-1">实际价格</label>
                     <input type="number" id="add-item-price" class="input-field" min="0" step="0.01">
+                </div>
+                <div class="mt-3">
+                    <label for="add-item-purchase-date" class="block text-sm font-medium text-gray-700 mb-1">购买时间</label>
+                    <div class="flex space-x-2">
+                        <input type="date" id="add-item-purchase-date" class="input-field flex-1">
+                        <button type="button" id="confirm-add-purchase-date" class="btn btn-sm btn-primary whitespace-nowrap">确认</button>
+                    </div>
                 </div>
                 <div>
                     <label for="add-item-status" class="block text-sm font-medium text-gray-700 mb-1">购买状态</label>
@@ -426,10 +441,6 @@
                     <div id="add-item-tags" class="flex flex-wrap gap-2">
                         <!-- 标签选择将通过JS动态生成 -->
                     </div>
-                    <div class="flex space-x-2 mt-2">
-                        <input type="text" id="add-item-new-tag" class="input-field" placeholder="添加新标签...">
-                        <button id="add-new-tag-btn" class="btn btn-sm btn-info">添加</button>
-                    </div>
                 </div>
                 <div class="flex justify-end space-x-3 pt-2">
                     <button type="button" class="btn btn-secondary close-modal">取消</button>
@@ -452,22 +463,29 @@
                 <input type="hidden" id="edit-item-id">
                 <div>
                     <label for="edit-item-category" class="block text-sm font-medium text-gray-700 mb-1">所属分类</label>
-                    <select id="edit-item-category" class="input-field" required>
+                    <select id="edit-item-category" class="input-field" required="">
                         <!-- 分类选项将通过JS动态生成 -->
                         <option value="">请选择分类</option>
                     </select>
                 </div>
                 <div>
                     <label for="edit-item-name" class="block text-sm font-medium text-gray-700 mb-1">商品名称</label>
-                    <input type="text" id="edit-item-name" class="input-field" required>
+                    <input type="text" id="edit-item-name" class="input-field" required="">
                 </div>
                 <div>
                     <label for="edit-item-budget" class="block text-sm font-medium text-gray-700 mb-1">预算金额</label>
-                    <input type="number" id="edit-item-budget" class="input-field" min="0" step="0.01" required>
+                    <input type="number" id="edit-item-budget" class="input-field" min="0" step="0.01" required="">
                 </div>
                 <div>
                     <label for="edit-item-price" class="block text-sm font-medium text-gray-700 mb-1">实际价格</label>
                     <input type="number" id="edit-item-price" class="input-field" min="0" step="0.01">
+                </div>
+                <div class="mt-3">
+                    <label for="edit-item-purchase-date" class="block text-sm font-medium text-gray-700 mb-1">购买时间</label>
+                    <div class="flex space-x-2">
+                        <input type="date" id="edit-item-purchase-date" class="input-field flex-1">
+                        <button type="button" id="confirm-edit-purchase-date" class="btn btn-sm btn-primary whitespace-nowrap">确认</button>
+                    </div>
                 </div>
                 <div>
                     <label for="edit-item-status" class="block text-sm font-medium text-gray-700 mb-1">购买状态</label>
@@ -522,10 +540,6 @@
                     <div id="edit-item-tags" class="flex flex-wrap gap-2">
                         <!-- 标签选择将通过JS动态生成 -->
                     </div>
-                    <div class="flex space-x-2 mt-2">
-                        <input type="text" id="edit-item-new-tag" class="input-field" placeholder="添加新标签...">
-                        <button id="edit-add-new-tag-btn" class="btn btn-sm btn-info">添加</button>
-                    </div>
                 </div>
                 <div class="flex justify-end space-x-3 pt-2">
                     <button type="button" class="btn btn-secondary close-modal">取消</button>
@@ -547,7 +561,7 @@
             <form id="add-tag-form" class="space-y-4">
                 <div>
                     <label for="tag-name" class="block text-sm font-medium text-gray-700 mb-1">标签名称</label>
-                    <input type="text" id="tag-name" class="input-field" required>
+                    <input type="text" id="tag-name" class="input-field" required="">
                 </div>
                 <div>
                     <label for="tag-color" class="block text-sm font-medium text-gray-700 mb-1">标签颜色</label>
@@ -565,7 +579,7 @@
     <div id="budget-analysis-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 transform transition-all">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">预算分析</h3>
+                <h3 class="text-lg font-semibold text-gray-800">分类价格统计</h3>
                 <div class="flex items-center space-x-2">
                     <button id="chart-type-pie" class="btn btn-sm btn-primary">饼图</button>
                     <button id="chart-type-bar" class="btn btn-sm btn-secondary">柱状图</button>
@@ -581,6 +595,12 @@
                         <canvas id="budget-chart"></canvas>
                     </div>
                 </div>
+                <div id="time-chart-container" class="bg-white rounded-lg p-4 hidden">
+                    <h4 class="text-md font-semibold text-gray-800 mb-3">按购买时间统计花费总额</h4>
+                    <div class="w-full h-64 md:h-80">
+                        <canvas id="time-chart"></canvas>
+                    </div>
+                </div>
                 <div id="budget-analysis-content" class="space-y-4">
                     <!-- 预算分析内容将通过JS动态生成 -->
                 </div>
@@ -591,8 +611,36 @@
         </div>
     </div>
 
+    <!-- 时间花费统计模态框 -->
+    <div id="time-analysis-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 transform transition-all">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">时间花费统计</h3>
+                <button class="close-modal text-gray-400 hover:text-gray-600">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg p-4">
+                    <div class="w-full h-80">
+                        <canvas id="time-spend-chart"></canvas>
+                    </div>
+                </div>
+                <div id="time-analysis-details" class="bg-white rounded-lg p-4">
+                    <h4 class="text-md font-semibold text-gray-800 mb-3">购买详情</h4>
+                    <div id="time-spend-details" class="space-y-2">
+                        <!-- 时间花费详情将通过JS动态生成 -->
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button class="btn btn-primary close-modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 户型规划窗口 -->
-    <div id="floor-plan-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="floor-plan-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" onwheel="event.stopPropagation()">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-6xl p-6 transform transition-all">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">户型图规划</h3>
@@ -603,16 +651,14 @@
             <div class="space-y-4">
                 <!-- 户型图显示区域 -->
                 <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-6 text-center" id="floor-plan-display-area">
-                    <div class="mb-4">
-                        <button id="change-floor-plan-btn" class="btn btn-sm btn-secondary flex items-center space-x-1 mx-auto">
+                    <input type="file" id="floor-plan-file-input" accept="image/*" class="hidden">
+                    <div id="floor-plan-preview" class="relative inline-block">
+                        <img id="floor-plan-image" src="https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/a9916b68333648c9b28f1ad0d62ea31c.png~tplv-a9rns2rl98-24:720:720.png?rcl=2026010121120604E4B89CE16DEFA55525&amp;rk3s=8e244e95&amp;rrcfp=8a172a1a&amp;x-expires=1767877927&amp;x-signature=mOvpFukwzGnj0gNqal05gpAZHW8%3D" alt="户型图" class="max-w-full max-h-[80vh] mx-auto">
+                        <div id="floor-plan-markers" class="absolute inset-0 pointer-events-none overflow-visible z-50"></div>
+                        <button id="change-floor-plan-btn" class="btn btn-sm btn-secondary flex items-center space-x-1 absolute bottom-2 right-2 z-40 bg-white bg-opacity-90 hover:bg-opacity-100 shadow-md">
                             <i class="fa fa-upload"></i>
                             <span>更换户型图</span>
                         </button>
-                        <input type="file" id="floor-plan-file-input" accept="image/*" class="hidden">
-                    </div>
-                    <div id="floor-plan-preview" class="relative inline-block">
-                        <img id="floor-plan-image" src="https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/a9916b68333648c9b28f1ad0d62ea31c.png~tplv-a9rns2rl98-24:720:720.png?rcl=2026010121120604E4B89CE16DEFA55525&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1767877927&x-signature=mOvpFukwzGnj0gNqal05gpAZHW8%3D" alt="户型图" class="max-w-full max-h-[60vh] mx-auto">
-                        <div id="floor-plan-markers" class="absolute inset-0 pointer-events-none overflow-visible z-50"></div>
                     </div>
                     <div class="mt-4 text-sm text-gray-500">
                         <p>当前户型图路径: <span id="current-floor-plan-path" class="font-mono">在线图片</span></p>
@@ -637,15 +683,15 @@
                         </button>
 
                     </div>
-                    <div class="text-sm text-gray-600">
+                    <div class="text-sm text-gray-600 mb-1">
                         提示：选中下方商品后，点击"添加标记"，在户型图上点击即可添加商品位置
                     </div>
                 </div>
                 
                 <!-- 商品列表 -->
                 <div class="bg-white rounded-lg shadow-sm p-4">
-                    <h4 class="font-medium text-gray-800 mb-3">选择要标记的商品</h4>
-                    <div id="floor-plan-items" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-40 overflow-y-auto">
+                    <h4 class="font-medium text-gray-800 mb-2">选择要标记的商品</h4>
+                    <div id="floor-plan-items" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-64 overflow-y-auto">
                         <!-- 商品列表将通过JS动态生成 -->
                     </div>
                 </div>
@@ -771,6 +817,11 @@
                     document.getElementById('add-tag-modal').classList.remove('hidden');
                 });
                 
+                // 删除标签按钮
+                document.getElementById('delete-tag-btn').addEventListener('click', () => {
+                    this.handleDeleteTag();
+                });
+                
                 // 添加标签表单提交
                 document.getElementById('add-tag-form').addEventListener('submit', (e) => {
                     e.preventDefault();
@@ -782,12 +833,6 @@
                         document.getElementById('add-tag-form').reset();
                         document.getElementById('add-tag-modal').classList.add('hidden');
                     }
-                });
-                
-                // 编辑商品表单提交
-                document.getElementById('edit-item-form').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.handleEditItemSubmit();
                 });
                 
                 // 搜索框
@@ -814,6 +859,12 @@
                 document.getElementById('budget-analysis-btn').addEventListener('click', () => {
                     console.log('预算分析按钮被点击');
                     this.showBudgetAnalysis();
+                });
+                
+                // 时间花费统计按钮
+                document.getElementById('time-analysis-btn').addEventListener('click', () => {
+                    console.log('时间花费统计按钮被点击');
+                    this.showTimeAnalysis();
                 });
                 
                 // 图表类型切换
@@ -1132,23 +1183,9 @@
                 });
                 
                 // 添加新标签按钮
-                document.getElementById('add-new-tag-btn').addEventListener('click', () => {
-                    const tagName = document.getElementById('add-item-new-tag').value;
-                    if (tagName) {
-                        this.addTag(tagName);
-                        document.getElementById('add-item-new-tag').value = '';
-                        this.renderAddItemTags();
-                    }
-                });
+
                 
-                document.getElementById('edit-add-new-tag-btn').addEventListener('click', () => {
-                    const tagName = document.getElementById('edit-item-new-tag').value;
-                    if (tagName) {
-                        this.addTag(tagName);
-                        document.getElementById('edit-item-new-tag').value = '';
-                        this.renderEditItemTags();
-                    }
-                });
+
             }
             
             // 渲染分类列表
@@ -1156,14 +1193,30 @@
                 const categoriesList = document.getElementById('categories-list');
                 categoriesList.innerHTML = '';
                 
+                // 计算总预算和已用预算
+                const totalBudget = this.categories.reduce((sum, category) => sum + category.budget, 0);
+                const totalSpent = this.items.reduce((sum, item) => sum + (item.price || 0), 0);
+                const totalUsageRate = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
+                
                 // 添加"全部"分类
                 const allCategoryItem = document.createElement('li');
                 allCategoryItem.innerHTML = `
-                    <a href="#" class="nav-link ${this.currentCategory === 'all' ? 'active' : ''}" data-category="all">
-                        <span class="flex items-center justify-between">
-                            <span>全部</span>
+                    <a href="#" class="nav-link ${this.currentCategory === 'all' ? 'active' : ''} border-2 rounded-lg p-2" data-category="all">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-medium">全部</span>
                             <span class="bg-gray-200 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full">${this.items.length}</span>
-                        </span>
+                        </div>
+                        <div class="text-xs text-gray-500 flex justify-between">
+                            <span>总预算: ¥${totalBudget.toFixed(2)}</span>
+                            <span>已用: ¥${totalSpent.toFixed(2)}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                            <div class="bg-primary h-1.5 rounded-full" style="width: ${Math.min(totalUsageRate, 100)}%"></div>
+                        </div>
+                        <div class="mt-1 text-xs text-gray-600 flex items-center justify-between">
+                            <span>使用率: ${totalUsageRate.toFixed(1)}%</span>
+                            <span>剩余: ¥${(totalBudget - totalSpent).toFixed(2)}</span>
+                        </div>
                     </a>
                 `;
                 allCategoryItem.querySelector('a').addEventListener('click', (e) => {
@@ -1180,12 +1233,17 @@
                     const categoryBudget = categoryItems.reduce((sum, item) => sum + (item.budget || 0), 0);
                     const categorySpent = categoryItems.reduce((sum, item) => sum + (item.price || 0), 0);
                     
+                    // 检查分类预算是否不足（商品预算总和大于分类预算）
+                    const isBudgetInsufficient = categoryBudget > category.budget;
+                    const budgetClass = isBudgetInsufficient ? 'border-red-500 bg-red-50' : '';
+                    const progressBarClass = isBudgetInsufficient ? 'bg-red-500' : 'bg-primary';
+                    
                     const categoryItem = document.createElement('li');
                     categoryItem.innerHTML = `
                         <div class="mb-2">
-                            <a href="#" class="nav-link ${this.currentCategory === category.id ? 'active' : ''}" data-category="${category.id}">
+                            <a href="#" class="nav-link ${this.currentCategory === category.id ? 'active' : ''} ${budgetClass} border-2 rounded-lg p-2" data-category="${category.id}">
                                 <div class="flex items-center justify-between mb-1">
-                                    <span>${category.name}</span>
+                                    <span class="font-medium ${isBudgetInsufficient ? 'text-red-700' : ''}">${category.name}</span>
                                     <div class="flex items-center space-x-1">
                                         <span class="bg-gray-200 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full">${categoryItems.length}</span>
                                         <div class="category-actions hidden">
@@ -1198,19 +1256,33 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-xs text-gray-500 flex justify-between">
+                                <div class="text-xs ${isBudgetInsufficient ? 'text-red-600' : 'text-gray-500'} flex justify-between">
                                     <span>预算: ¥${category.budget.toFixed(2)}</span>
                                     <span>已用: ¥${categorySpent.toFixed(2)}</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                                    <div class="bg-primary h-1.5 rounded-full" style="width: ${Math.min((categoryBudget / category.budget) * 100, 100)}%"></div>
+                                    <div class="${progressBarClass} h-1.5 rounded-full" style="width: ${Math.min((categoryBudget / category.budget) * 100, 100)}%"></div>
                                 </div>
+                                ${isBudgetInsufficient ? `
+                                    <div class="mt-1 text-xs text-red-600 flex items-center">
+                                        <i class="fa fa-exclamation-triangle mr-1"></i>
+                                        <span>预算不足</span>
+                                    </div>
+                                ` : ''}
                             </a>
                         </div>
                     `;
                     categoryItem.querySelector('a').addEventListener('click', (e) => {
                         e.preventDefault();
                         this.currentCategory = category.id;
+                        
+                        // 如果预算不足，显示提示信息
+                        if (isBudgetInsufficient) {
+                            const deficit = categoryBudget - category.budget;
+                            const suggestedBudget = Math.ceil(categoryBudget * 1.1); // 建议预算为商品预算总和的110%
+                            alert(`⚠️ 预算警告：\n\n"${category.name}"分类预算不足！\n\n当前分类预算：¥${category.budget.toFixed(2)}\n商品预算总和：¥${categoryBudget.toFixed(2)}\n预算缺口：¥${deficit.toFixed(2)}\n\n建议：将分类预算调整至 ¥${suggestedBudget.toFixed(2)} 或以上，以覆盖所有商品预算。`);
+                        }
+                        
                         this.renderCategories();
                         this.renderItems();
                     });
@@ -1271,9 +1343,14 @@
                 
                 // 添加各个标签
                 this.tags.forEach(tag => {
+                    // 检查标签是否被商品使用
+                    const isUsed = this.items.some(item => item.tags && item.tags.includes(tag.id));
+                    const usedClass = isUsed ? 'border-2 border-yellow-400' : '';
+                    const usedTitle = isUsed ? ' (已被使用)' : '';
+                    
                     const tagItem = document.createElement('span');
                     tagItem.innerHTML = `
-                        <span class="badge cursor-pointer" style="background-color: ${this.currentTag === tag.id ? tag.color : '#e5e7eb'}; color: ${this.currentTag === tag.id ? 'white' : '#374151'}" data-tag="${tag.id}">${tag.name}</span>
+                        <span class="badge cursor-pointer ${usedClass}" style="background-color: ${this.currentTag === tag.id ? tag.color : '#e5e7eb'}; color: ${this.currentTag === tag.id ? 'white' : '#374151'}" data-tag="${tag.id}" title="${tag.name}${usedTitle}">${tag.name}${isUsed ? ' *' : ''}</span>
                     `;
                     tagItem.querySelector('span').addEventListener('click', () => {
                         this.currentTag = tag.id;
@@ -1282,6 +1359,81 @@
                     });
                     tagsList.appendChild(tagItem);
                 });
+                
+                // 更新删除按钮状态
+                this.updateDeleteTagButtonState();
+            }
+            
+            // 更新删除按钮状态
+            updateDeleteTagButtonState() {
+                const deleteBtn = document.getElementById('delete-tag-btn');
+                const hasTags = this.tags.length > 0;
+                
+                if (hasTags) {
+                    deleteBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    deleteBtn.disabled = false;
+                } else {
+                    deleteBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    deleteBtn.disabled = true;
+                }
+            }
+            
+            // 处理删除标签
+            handleDeleteTag() {
+                if (this.tags.length === 0) {
+                    return;
+                }
+                
+                if (this.currentTag === 'all') {
+                    // 如果当前选择的是"全部"，显示标签选择对话框
+                    const tagOptions = this.tags.map(tag => {
+                        const isUsed = this.items.some(item => item.tags && item.tags.includes(tag.id));
+                        const usedMark = isUsed ? ' (已使用)' : '';
+                        return `${tag.name}${usedMark}`;
+                    }).join('\n');
+                    
+                    const tagName = prompt(`请输入要删除的标签名称：\n\n可用标签：\n${tagOptions}`);
+                    
+                    if (!tagName) return;
+                    
+                    const tag = this.tags.find(t => t.name.toLowerCase() === tagName.toLowerCase());
+                    if (tag) {
+                        this.deleteTag(tag.id);
+                    }
+                } else {
+                    // 如果当前选择了特定标签，直接删除
+                    this.deleteTag(this.currentTag);
+                }
+            }
+            
+            // 删除标签
+            deleteTag(tagId) {
+                const tag = this.tags.find(t => t.id === tagId);
+                if (!tag) return;
+                
+                // 检查标签是否被商品使用
+                const usingItems = this.items.filter(item => item.tags && item.tags.includes(tagId));
+                
+                if (usingItems.length > 0) {
+                    // 从使用该标签的商品中移除标签
+                    usingItems.forEach(item => {
+                        item.tags = item.tags.filter(t => t !== tagId);
+                    });
+                }
+                
+                // 删除标签
+                this.tags = this.tags.filter(t => t.id !== tagId);
+                
+                // 如果当前选择的是被删除的标签，切换到"全部"
+                if (this.currentTag === tagId) {
+                    this.currentTag = 'all';
+                }
+                
+                // 保存数据并更新界面
+                this.saveData();
+                this.renderTags();
+                this.renderItems();
+                this.updateStats();
             }
             
             // 渲染商品列表
@@ -1381,7 +1533,8 @@
                         console.log('商品卡片渲染 - 主要标记颜色:', markerColor, '分类:', categoryName);
                         
                         // 创建标记徽章
-                        const markerBadge = `<span class="badge ml-1 marker-badge" data-item-id="${item.id}" style="background-color: ${markerColor}; color: white;" title="${hasFloorPlanMarker ? '已在户型图上标记' : '未在户型图上标记'}"><i class="fa fa-map-marker"></i></span>`;
+                        const textColor = markerColor === '#ffffff' ? 'black' : 'white';
+                        const markerBadge = `<span class="badge ml-1 marker-badge" data-item-id="${item.id}" style="background-color: ${markerColor}; color: ${textColor};" title="${hasFloorPlanMarker ? '已在户型图上标记' : '未在户型图上标记'}"><i class="fa fa-map-marker"></i></span>`;
                         
                         // 获取标签信息
                         const itemTags = item.tags && item.tags.length > 0 ? 
@@ -1391,6 +1544,7 @@
                                     return tag ? `<span class="badge" style="background-color: ${tag.color || '#e5e7eb'}">${tag.name}</span>` : '';
                                 }).join('')}
                             </div>` : '';
+                        console.log('商品卡片渲染 - 标签信息:', item.name, '标签ID:', item.tags, '渲染结果:', itemTags);
                         
                         // 获取商品链接
                         const itemLink = item.pddLink ? 
@@ -1594,7 +1748,7 @@
                 tagsContainer.innerHTML = '';
                 
                 this.tags.forEach(tag => {
-                    const isSelected = selectedTags.some(t => t.id === tag.id);
+                    const isSelected = selectedTags.includes(tag.id);
                     const tagItem = document.createElement('label');
                     tagItem.className = 'inline-flex items-center cursor-pointer';
                     tagItem.innerHTML = `
@@ -1667,7 +1821,7 @@
             getMarkerColorByCategory(categoryName) {
                 const colorMap = {
                     '客厅': '#ef4444', // 红色
-                    '卧室': '#8b5cf6', // 紫色
+                    '卧室': '#ffffff', // 白色
                     '厨房': '#10b981', // 绿色
                     '卫生间': '#3b82f6', // 蓝色
                     '餐厅': '#f59e0b', // 橙色
@@ -1707,7 +1861,7 @@
                     const hoverColor = this.adjustColor(markerColor, -20); // 悬停时颜色稍深
                     
                     const markerElement = document.createElement('div');
-                    markerElement.className = 'floor-plan-marker absolute w-6 h-6 text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-all duration-300 z-50 border-1 border-white';
+                    markerElement.className = 'floor-plan-marker absolute w-3 h-3 text-white rounded-full flex items-center justify-center cursor-pointer shadow-md transition-all duration-300 z-50 border-0.5 border-white';
                     markerElement.style.backgroundColor = markerColor;
                     markerElement.style.setProperty('--marker-color', markerColor);
                     markerElement.style.setProperty('--marker-hover-color', hoverColor);
@@ -1811,6 +1965,234 @@
                 document.getElementById('total-remaining-progress').style.width = `${totalBudget > 0 ? (totalRemaining / totalBudget) * 100 : 0}%`;
             }
             
+            // 绑定预算分析窗口关闭事件
+            bindBudgetAnalysisCloseEvents(modal) {
+                const closeButtons = modal.querySelectorAll('.close-modal');
+                
+                closeButtons.forEach(button => {
+                    // 移除现有的事件监听器，避免重复绑定
+                    const newButton = button.cloneNode(true);
+                    button.parentNode.replaceChild(newButton, button);
+                    
+                    newButton.addEventListener('click', () => {
+                        console.log('关闭预算分析窗口');
+                        
+                        // 恢复背景滚动
+                        document.body.style.overflow = '';
+                        
+                        // 隐藏模态框
+                        modal.classList.add('hidden');
+                        modal.style.display = 'none';
+                        modal.style.visibility = 'hidden';
+                        modal.setAttribute('data-visible', 'false');
+                        
+                        console.log('预算分析窗口已关闭');
+                    });
+                });
+                
+                // 绑定背景点击事件
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal || e.target.classList.contains('bg-black')) {
+                        console.log('点击背景关闭预算分析窗口');
+                        
+                        // 恢复背景滚动
+                        document.body.style.overflow = '';
+                        
+                        // 隐藏模态框
+                        modal.classList.add('hidden');
+                        modal.style.display = 'none';
+                        modal.style.visibility = 'hidden';
+                        modal.setAttribute('data-visible', 'false');
+                        
+                        console.log('预算分析窗口已关闭');
+                    }
+                });
+            }
+            
+            // 绑定购买时间确认按钮事件
+            bindPurchaseDateConfirmEvents() {
+                // 添加商品时的购买时间确认
+                const addConfirmBtn = document.getElementById('confirm-add-purchase-date');
+                if (addConfirmBtn) {
+                    addConfirmBtn.addEventListener('click', () => {
+                        const dateInput = document.getElementById('add-item-purchase-date');
+                        if (dateInput && dateInput.value) {
+                            // 显示成功提示
+                            this.showSimpleNotification('购买时间已确认', 'success');
+                            // 可以在这里添加额外的逻辑，比如自动保存到临时存储
+                            console.log('添加商品 - 购买时间已确认:', dateInput.value);
+                        } else {
+                            this.showSimpleNotification('请先选择购买日期', 'warning');
+                        }
+                    });
+                }
+
+                // 编辑商品时的购买时间确认
+                const editConfirmBtn = document.getElementById('confirm-edit-purchase-date');
+                if (editConfirmBtn) {
+                    editConfirmBtn.addEventListener('click', () => {
+                        const dateInput = document.getElementById('edit-item-purchase-date');
+                        const itemIdInput = document.getElementById('edit-item-id');
+                        
+                        if (dateInput && dateInput.value && itemIdInput && itemIdInput.value) {
+                            const itemId = itemIdInput.value;
+                            const purchaseDate = dateInput.value;
+                            
+                            // 直接更新商品的购买时间
+                            const itemIndex = this.items.findIndex(item => item.id === itemId);
+                            if (itemIndex !== -1) {
+                                this.items[itemIndex].purchaseDate = purchaseDate;
+                                this.saveData();
+                                
+                                // 显示成功提示
+                                this.showSimpleNotification('购买时间已更新', 'success');
+                                console.log('编辑商品 - 购买时间已更新:', itemId, purchaseDate);
+                                
+                                // 更新界面显示
+                                this.renderItems();
+                                this.updateStats();
+                            }
+                        } else {
+                            this.showSimpleNotification('请先选择购买日期', 'warning');
+                        }
+                    });
+                }
+            }
+
+            // 显示简单通知
+            showSimpleNotification(message, type = 'info') {
+                // 创建通知元素
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-md shadow-lg transition-all transform translate-x-full opacity-0`;
+                
+                // 设置样式
+                switch (type) {
+                    case 'success':
+                        notification.classList.add('bg-green-500', 'text-white');
+                        break;
+                    case 'warning':
+                        notification.classList.add('bg-yellow-500', 'text-white');
+                        break;
+                    case 'error':
+                        notification.classList.add('bg-red-500', 'text-white');
+                        break;
+                    default:
+                        notification.classList.add('bg-blue-500', 'text-white');
+                }
+                
+                // 设置内容
+                notification.textContent = message;
+                
+                // 添加到页面
+                document.body.appendChild(notification);
+                
+                // 显示动画
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full', 'opacity-0');
+                    notification.classList.add('translate-x-0', 'opacity-100');
+                }, 100);
+                
+                // 自动隐藏
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-0', 'opacity-100');
+                    notification.classList.add('translate-x-full', 'opacity-0');
+                    
+                    // 移除元素
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            
+            // 绑定全局事件监听
+            bindGlobalEvents() {
+                // 使用事件委托处理所有按钮点击
+                document.addEventListener('click', (e) => {
+                    // 时间花费统计按钮
+                    if (e.target.closest('#time-analysis-btn')) {
+                        this.showTimeAnalysis();
+                    }
+                    
+                    // 预算分析按钮
+                    if (e.target.closest('#budget-analysis-btn')) {
+                        this.showBudgetAnalysis();
+                    }
+                    
+                    // 平台分析按钮
+                    if (e.target.closest('#platform-analysis-btn')) {
+                        this.showPlatformAnalysis();
+                    }
+                    
+                    // 导入/导出按钮
+                    if (e.target.closest('#import-export-btn')) {
+                        const dropdown = document.getElementById('import-export-dropdown');
+                        if (dropdown) {
+                            dropdown.classList.toggle('hidden');
+                        }
+                    }
+                    
+                    // 导出数据按钮
+                    if (e.target.closest('#export-data-btn')) {
+                        this.exportData();
+                        const dropdown = document.getElementById('import-export-dropdown');
+                        if (dropdown) {
+                            dropdown.classList.add('hidden');
+                        }
+                    }
+                    
+                    // 导入数据按钮
+                    if (e.target.closest('#import-data-btn')) {
+                        const fileInput = document.getElementById('import-file-input');
+                        if (fileInput) {
+                            fileInput.click();
+                        }
+                        const dropdown = document.getElementById('import-export-dropdown');
+                        if (dropdown) {
+                            dropdown.classList.add('hidden');
+                        }
+                    }
+                    
+                    // 关闭模态框按钮
+                    if (e.target.closest('.close-modal')) {
+                        const modal = e.target.closest('.fixed');
+                        if (modal) {
+                            modal.classList.add('hidden');
+                            document.body.style.overflow = '';
+                            
+                            // 销毁图表
+                            if (this.timeSpendChart) {
+                                this.timeSpendChart.destroy();
+                                this.timeSpendChart = null;
+                            }
+                        }
+                    }
+                });
+                
+                // 点击页面其他地方关闭下拉菜单
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#import-export-btn') && !e.target.closest('#import-export-dropdown')) {
+                        const dropdown = document.getElementById('import-export-dropdown');
+                        if (dropdown) {
+                            dropdown.classList.add('hidden');
+                        }
+                    }
+                });
+                
+                // 文件导入事件
+                const importFileInput = document.getElementById('import-file-input');
+                if (importFileInput) {
+                    importFileInput.addEventListener('change', (e) => {
+                        if (e.target.files.length > 0) {
+                            this.importData(e.target.files[0]);
+                            e.target.value = ''; // 重置文件输入
+                        }
+                    });
+                }
+            }
+
+
             // 渲染图表
             renderChart() {
                 const ctx = document.getElementById('budget-chart').getContext('2d');
@@ -1847,7 +2229,9 @@
                                     '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899',
                                     '#6366f1', '#14b8a6', '#f97316', '#e11d48', '#a855f7', '#db2777'
                                 ],
-                                borderWidth: 1
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                borderWidth: 2
                             }]
                         },
                         options: {
@@ -1855,7 +2239,12 @@
                             maintainAspectRatio: false,
                             plugins: {
                                 legend: {
-                                    position: 'bottom'
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 20,
+                                        usePointStyle: true,
+                                        pointStyle: 'circle'
+                                    }
                                 },
                                 tooltip: {
                                     callbacks: {
@@ -1867,9 +2256,24 @@
                                             return `${label}: ¥${value.toFixed(2)} (${percentage}%)`;
                                         }
                                     }
+                                },
+                                datalabels: {
+                                    color: '#ffffff',
+                                    font: {
+                                        weight: 'bold',
+                                        size: 12
+                                    },
+                                    formatter: function(value, context) {
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((value / total) * 100);
+                                        return `${percentage}%`;
+                                    },
+                                    anchor: 'center',
+                                    align: 'center'
                                 }
                             }
-                        }
+                        },
+                        plugins: []
                     });
                 } else {
                     this.chart = new Chart(ctx, {
@@ -1941,6 +2345,9 @@
                 // 渲染标签选择
                 this.renderAddItemTags();
                 
+                // 绑定购买时间确认按钮事件
+                this.bindPurchaseDateConfirmEvents();
+
                 // 显示模态框
                 document.getElementById('add-item-modal').classList.remove('hidden');
             }
@@ -1951,6 +2358,7 @@
                 const name = document.getElementById('add-item-name').value;
                 const budget = document.getElementById('add-item-budget').value;
                 const price = document.getElementById('add-item-price').value;
+                const purchaseDate = document.getElementById('add-item-purchase-date').value;
                 const status = document.getElementById('add-item-status').value;
                 const notes = document.getElementById('add-item-notes').value;
                 const pddLink = document.getElementById('add-item-pdd-link').value;
@@ -1971,7 +2379,7 @@
                     const category = this.categories.find(cat => cat.id === categoryId);
                     if (category) {
                         console.log('找到分类:', category.name);
-                        const newItem = this.addItem(categoryId, name, budget, price, status, notes, tagIds, pddLink, imageData);
+                        const newItem = this.addItem(categoryId, name, budget, price, purchaseDate, status, notes, tagIds, pddLink, imageData);
                         console.log('新商品:', newItem);
                         
                         // 如果是从户型图添加的商品，在户型图上添加标记
@@ -1992,12 +2400,23 @@
                 console.log('显示编辑商品模态框 - 商品ID:', item.id);
                 
                 try {
+                    // 确保商品对象存在
+                    if (!item) {
+                        console.error('商品对象不存在');
+                        return;
+                    }
+                    
+                    // 确保标签数组存在
+                    const itemTags = Array.isArray(item.tags) ? item.tags : [];
+                    console.log('编辑商品 - 当前标签:', itemTags, '商品名称:', item.name);
+                    
                     // 填充表单数据
                     const idInput = document.getElementById('edit-item-id');
                     const categoryInput = document.getElementById('edit-item-category');
                     const nameInput = document.getElementById('edit-item-name');
                     const budgetInput = document.getElementById('edit-item-budget');
                     const priceInput = document.getElementById('edit-item-price');
+                    const purchaseDateInput = document.getElementById('edit-item-purchase-date');
                     const statusInput = document.getElementById('edit-item-status');
                     const notesInput = document.getElementById('edit-item-notes');
                     const pddLinkInput = document.getElementById('edit-item-pdd-link');
@@ -2007,6 +2426,14 @@
                     if (nameInput) nameInput.value = item.name;
                     if (budgetInput) budgetInput.value = item.budget;
                     if (priceInput) priceInput.value = item.price || '';
+                    if (purchaseDateInput && item.purchaseDate) {
+                        // 将ISO日期格式转换为date格式（YYYY-MM-DD）
+                        const date = new Date(item.purchaseDate);
+                        const localDateString = date.toISOString().split('T')[0]; // YYYY-MM-DD
+                        purchaseDateInput.value = localDateString;
+                    } else if (purchaseDateInput) {
+                        purchaseDateInput.value = '';
+                    }
                     if (statusInput) statusInput.value = item.status || 'pending';
                     if (notesInput) notesInput.value = item.notes || '';
                     if (pddLinkInput) pddLinkInput.value = item.pddLink || '';
@@ -2387,10 +2814,15 @@
                         categorySelect.appendChild(option);
                     });
                     
-                    // 渲染标签选择
-                    this.renderEditItemTags(item.tags || []);
+                    // 渲染标签选择 - 使用安全的标签数组
+                    const safeTags = Array.isArray(item.tags) ? item.tags : [];
+                    console.log('在bindImageUploadEvents中渲染标签选择 - 标签数组:', safeTags);
+                    this.renderEditItemTags(safeTags);
                 }
                 
+                // 绑定购买时间确认按钮事件
+                this.bindPurchaseDateConfirmEvents();
+
                 // 显示模态框
                 document.getElementById('edit-item-modal').classList.remove('hidden');
             }
@@ -2402,6 +2834,7 @@
                 const name = document.getElementById('edit-item-name').value;
                 const budget = document.getElementById('edit-item-budget').value;
                 const price = document.getElementById('edit-item-price').value;
+                const purchaseDate = document.getElementById('edit-item-purchase-date').value;
                 const status = document.getElementById('edit-item-status').value;
                 const notes = document.getElementById('edit-item-notes').value;
                 const pddLink = document.getElementById('edit-item-pdd-link').value;
@@ -2458,7 +2891,7 @@
                             console.log('图片数据长度:', imageData.length);
                             
                             // 保存商品
-                            this.saveEditedItem(id, categoryId, name, budget, price, status, notes, tagIds, pddLink, imageData);
+                            this.saveEditedItem(id, categoryId, name, budget, price, purchaseDate, status, notes, tagIds, pddLink, imageData);
                         } catch (saveError) {
                             console.error('保存图片数据时出错:', saveError);
                             alert('图片保存失败，请重试');
@@ -2481,18 +2914,18 @@
                     console.log('预览图片数据长度:', imageData.length);
                     
                     // 保存商品
-                    this.saveEditedItem(id, categoryId, name, budget, price, status, notes, tagIds, pddLink, imageData);
+                    this.saveEditedItem(id, categoryId, name, budget, price, purchaseDate, status, notes, tagIds, pddLink, imageData);
                 } else {
                     console.log('没有检测到新图片，使用现有图片数据');
                     console.log('使用的图片数据:', imageData ? '有数据' : '无数据');
                     
                     // 保存商品
-                    this.saveEditedItem(id, categoryId, name, budget, price, status, notes, tagIds, pddLink, imageData);
+                    this.saveEditedItem(id, categoryId, name, budget, price, purchaseDate, status, notes, tagIds, pddLink, imageData);
                 }
             }
             
             // 保存编辑后的商品
-            saveEditedItem(id, categoryId, name, budget, price, status, notes, tagIds, pddLink, imageData) {
+            saveEditedItem(id, categoryId, name, budget, price, purchaseDate, status, notes, tagIds, pddLink, imageData) {
                 console.log('开始保存编辑后的商品');
                 console.log('商品ID:', id);
                 console.log('分类ID:', categoryId);
@@ -2543,6 +2976,7 @@
                         categoryId,
                         categoryName: category.name,
                         name,
+                        purchaseDate,
                         budget: parseFloat(budget),
                         price: price ? parseFloat(price) : 0,
                         status,
@@ -2717,6 +3151,12 @@
                                     </div>
                                 </div>
                             ` : ''}
+                            ${item.notes ? `
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">备注</label>
+                                    <p class="text-gray-800 whitespace-pre-wrap">${item.notes}</p>
+                                </div>
+                            ` : ''}
                             <div class="flex justify-end pt-4">
                                 <button class="btn btn-primary close-modal">关闭</button>
                             </div>
@@ -2765,6 +3205,9 @@
                         
                         // 将模态框移到最上层
                         budgetAnalysisModal.style.zIndex = '1000';
+                        
+                        // 绑定关闭事件
+                        this.bindBudgetAnalysisCloseEvents(budgetAnalysisModal);
                         
                         console.log('预算分析已显示');
                     } else {
@@ -2906,7 +3349,7 @@
             }
             
             // 添加商品
-            addItem(categoryId, name, budget, price = 0, status = 'pending', notes = '', tagIds = [], pddLink = '', image = null) {
+            addItem(categoryId, name, budget, price = 0, purchaseDate = null, status = 'pending', notes = '', tagIds = [], pddLink = '', image = null) {
                 const category = this.categories.find(cat => cat.id === categoryId);
                 if (!category) return null;
                 
@@ -2921,6 +3364,7 @@
                     categoryId,
                     categoryName: category.name,
                     name,
+                    purchaseDate,
                     budget: parseFloat(budget),
                     price: parseFloat(price) || 0,
                     status,
@@ -3744,29 +4188,317 @@
                 }, 100);
             }
             
+            // 按时间统计购买花费
+            getTimeSpendStats() {
+                const timeStats = {};
+                
+                // 只统计有购买时间和价格的商品
+                this.items.forEach(item => {
+                    if (item.purchaseDate && item.price && item.price > 0) {
+                        const dateKey = item.purchaseDate; // 使用YYYY-MM-DD格式作为键
+                        
+                        if (!timeStats[dateKey]) {
+                            timeStats[dateKey] = {
+                                date: dateKey,
+                                amount: 0,
+                                items: []
+                            };
+                        }
+                        
+                        timeStats[dateKey].amount += item.price;
+                        timeStats[dateKey].items.push(item);
+                    }
+                });
+                
+                // 转换为数组并按日期排序
+                return Object.values(timeStats)
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .map(stat => ({
+                        ...stat,
+                        formattedDate: this.formatDate(stat.date)
+                    }));
+            }
+            
+            // 格式化日期
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return `${date.getMonth() + 1}月${date.getDate()}日`;
+            }
+            
+            // 显示时间花费统计
+            showTimeAnalysis() {
+                console.log('显示时间花费统计');
+                
+                try {
+                    const timeStats = this.getTimeSpendStats();
+                    const modal = document.getElementById('time-analysis-modal');
+                    
+                    if (!modal) {
+                        console.error('时间花费统计模态框未找到');
+                        return;
+                    }
+                    
+                    // 显示模态框
+                    modal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                    
+                    // 渲染图表
+                    this.renderTimeSpendChart(timeStats);
+                    
+                    // 渲染详情
+                    this.renderTimeSpendDetails(timeStats);
+                    
+                    // 绑定关闭事件
+                    this.bindTimeAnalysisCloseEvents(modal);
+                    
+                } catch (error) {
+                    console.error('显示时间花费统计时出错:', error);
+                    this.showSimpleNotification('显示统计失败', 'error');
+                }
+            }
+            
+            // 渲染时间花费折线图
+            renderTimeSpendChart(timeStats) {
+                const ctx = document.getElementById('time-spend-chart');
+                if (!ctx) {
+                    console.error('时间花费图表canvas未找到');
+                    return;
+                }
+                
+                // 准备数据
+                const labels = timeStats.map(stat => stat.formattedDate);
+                const data = timeStats.map(stat => stat.amount);
+                const dates = timeStats.map(stat => stat.date);
+                
+                // 创建图表
+                if (this.timeSpendChart) {
+                    this.timeSpendChart.destroy();
+                }
+                
+                this.timeSpendChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '购买金额',
+                            data: data,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#10b981',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        const index = context[0].dataIndex;
+                                        return `${dates[index]} (${labels[index]})`;
+                                    },
+                                    label: function(context) {
+                                        const value = context.raw || 0;
+                                        const index = context.dataIndex;
+                                        const items = timeStats[index].items;
+                                        let tooltipText = `总金额: ¥${value.toFixed(2)}\n购买商品:`;
+                                        
+                                        items.forEach(item => {
+                                            tooltipText += `\n- ${item.name}: ¥${item.price.toFixed(2)}`;
+                                        });
+                                        
+                                        return tooltipText;
+                                    }
+                                },
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff',
+                                borderColor: '#10b981',
+                                borderWidth: 1,
+                                cornerRadius: 8,
+                                displayColors: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return '¥' + value;
+                                    }
+                                }
+                            }
+                        },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                const index = elements[0].index;
+                                const stat = timeStats[index];
+                                this.showTimeSpendDetailModal(stat);
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // 渲染时间花费详情
+            renderTimeSpendDetails(timeStats) {
+                const detailsContainer = document.getElementById('time-spend-details');
+                if (!detailsContainer) return;
+                
+                if (timeStats.length === 0) {
+                    detailsContainer.innerHTML = `
+                        <div class="text-center text-gray-500 py-4">
+                            暂无购买记录
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                timeStats.forEach(stat => {
+                    html += `
+                        <div class="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer" 
+                             onclick="app.showTimeSpendDetailModal(${JSON.stringify(stat).replace(/"/g, '&quot;')})">
+                            <div class="flex justify-between items-center mb-2">
+                                <h5 class="font-semibold text-gray-800">${stat.formattedDate} (${stat.date})</h5>
+                                <span class="text-lg font-bold text-green-600">¥${stat.amount.toFixed(2)}</span>
+                            </div>
+                            <div class="text-sm text-gray-600">
+                                共购买 ${stat.items.length} 件商品
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                detailsContainer.innerHTML = html;
+            }
+            
+            // 显示时间花费详情模态框
+            showTimeSpendDetailModal(stat) {
+                // 创建模态框
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                modal.style.zIndex = '20000';
+                
+                let itemsHtml = '';
+                stat.items.forEach(item => {
+                    itemsHtml += `
+                        <div class="border-b last:border-b-0 py-3">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">${item.name}</h4>
+                                    <p class="text-sm text-gray-600">${item.categoryName}</p>
+                                </div>
+                                <span class="font-bold text-green-600">¥${item.price.toFixed(2)}</span>
+                            </div>
+                            ${item.notes ? `<p class="text-sm text-gray-500 mt-1">${item.notes}</p>` : ''}
+                            <div class="mt-2 flex justify-end">
+                                
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                modal.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">${stat.formattedDate} 购买详情</h3>
+                            <button class="close-modal text-gray-400 hover:text-gray-600" onclick="this.closest('.fixed').remove()">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="mb-4">
+                            <div class="text-2xl font-bold text-green-600">¥${stat.amount.toFixed(2)}</div>
+                            <div class="text-sm text-gray-600">共 ${stat.items.length} 件商品</div>
+                        </div>
+                        <div class="space-y-2">
+                            ${itemsHtml}
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+            }
+            
+            // 绑定时间分析关闭事件
+            bindTimeAnalysisCloseEvents(modal) {
+                const closeButtons = modal.querySelectorAll('.close-modal');
+                closeButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        modal.classList.add('hidden');
+                        document.body.style.overflow = '';
+                        
+                        // 销毁图表
+                        if (this.timeSpendChart) {
+                            this.timeSpendChart.destroy();
+                            this.timeSpendChart = null;
+                        }
+                    });
+                });
+                
+                // 点击背景关闭
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                        document.body.style.overflow = '';
+                        
+                        // 销毁图表
+                        if (this.timeSpendChart) {
+                            this.timeSpendChart.destroy();
+                            this.timeSpendChart = null;
+                        }
+                    }
+                });
+            }
+
             // 按平台统计预算和实际花费
             getPlatformStats() {
                 const platformStats = {};
                 
                 this.items.forEach(item => {
-                    const platform = item.platform || this.getPlatformName(null, item.pddLink) || '未知平台';
-                    
-                    if (!platformStats[platform]) {
-                        platformStats[platform] = {
-                            platform: platform,
-                            budget: 0,
-                            spent: 0,
-                            items: 0,
-                            purchased: 0
-                        };
-                    }
-                    
-                    platformStats[platform].budget += item.budget || 0;
-                    platformStats[platform].spent += item.price || 0;
-                    platformStats[platform].items += 1;
-                    
-                    if (item.status === 'purchased') {
-                        platformStats[platform].purchased += 1;
+                    // 只统计有链接的商品
+                    if (item.pddLink && item.pddLink.trim() !== '') {
+                        const platform = item.platform || this.getPlatformName(null, item.pddLink) || '未知平台';
+                        
+                        if (!platformStats[platform]) {
+                            platformStats[platform] = {
+                                platform: platform,
+                                budget: 0,
+                                spent: 0,
+                                items: 0,
+                                purchased: 0
+                            };
+                        }
+                        
+                        platformStats[platform].budget += item.budget || 0;
+                        platformStats[platform].spent += item.price || 0;
+                        platformStats[platform].items += 1;
+                        
+                        if (item.status === 'purchased') {
+                            platformStats[platform].purchased += 1;
+                        }
                     }
                 });
                 
@@ -3790,7 +4522,7 @@
                 let tableHtml = `
                     <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl font-semibold text-gray-800">平台预算分析</h3>
+                            <h3 class="text-xl font-semibold text-gray-800">平台价格统计</h3>
                             <button class="close-modal text-gray-400 hover:text-gray-600">
                                 <i class="fa fa-times"></i>
                             </button>
@@ -3931,21 +4663,21 @@
                         const data = JSON.parse(e.target.result);
                         
                         if (data.categories && data.items && data.tags) {
-                            if (confirm('导入数据将覆盖当前所有数据，确定要继续吗？')) {
-                                this.categories = data.categories;
-                                this.items = data.items;
-                                this.tags = data.tags;
-                                this.floorPlan = data.floorPlan || { image: null, markers: [] };
-                                
-                                this.saveData();
-                                this.renderCategories();
-                                this.renderTags();
-                                this.renderItems();
-                                this.updateStats();
-                                this.renderChart();
-                                
-                                alert('数据导入成功！');
-                            }
+                            // 直接导入数据，不显示确认弹窗
+                            console.log('开始导入数据...');
+                            this.categories = data.categories;
+                            this.items = data.items;
+                            this.tags = data.tags;
+                            this.floorPlan = data.floorPlan || { image: null, markers: [] };
+                            
+                            this.saveData();
+                            this.renderCategories();
+                            this.renderTags();
+                            this.renderItems();
+                            this.updateStats();
+                            this.renderChart();
+                            
+                            alert('数据导入成功！');
                         } else {
                             alert('导入失败：无效的数据格式');
                         }
@@ -4237,10 +4969,282 @@
             });
         });
     </script>
-</body>
-        <!-- 版本号显示 -->
-        <div class="fixed bottom-4 right-4 bg-white bg-opacity-80 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-gray-600 shadow-sm border border-gray-200">
-            版本号: v238
+
+    <script>
+        // 应用初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('应用初始化...');
+            
+            // 创建应用实例
+            window.app = new BudgetApp();
+            
+            // 绑定全局事件
+            window.app.bindGlobalEvents();
+            
+            console.log('应用初始化完成');
+        });
+    </script>
+
+    <!-- 引入 Supabase 客户端库 -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script>
+        // 初始化 Supabase 客户端 (替换成你的密钥！)
+        const supabaseUrl = 'https://ghoqxmbjymjbcvrfeagn.supabase.co';
+        const supabaseKey = 'sb_publishable_GkPvZGm__fPkfqhRsIbx7w_k09HBr_8';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // 我们将操作表中 id=1 的这条记录，它保存着我们的主JSON数据
+        const DATA_RECORD_ID = 1;
+
+        /**
+         * 1. 从云端加载共享的JSON数据
+         */
+        async function loadSharedJson() {
+            const { data, error } = await supabase
+                .from('shared_data')
+                .select('json_data') // 只选择 json_data 列
+                .eq('id', DATA_RECORD_ID) // 查找 id=1 的记录
+                .single(); // 确保只返回单条记录
+
+            if (error) {
+                // 如果是第一次，记录不存在，则创建一个初始JSON
+                if (error.code === 'PGRST116') {
+                    console.log('首次使用，创建初始数据...');
+                    await createInitialJson();
+                    return { json_data: {} }; // 返回空对象
+                }
+                console.error('加载数据失败:', error);
+                return null;
+            }
+            return data; // 返回格式如: { json_data: { ... } }
+        }
+
+        /**
+         * 2. 创建初始的JSON数据记录
+         */
+        async function createInitialJson() {
+            const initialData = {
+                notes: [],
+                counters: { count: 0 },
+                settings: { theme: 'light' }
+                // 你可以在这里定义任何你想要的初始JSON结构
+            };
+            
+            const { error } = await supabase
+                .from('shared_data')
+                .insert([{ id: DATA_RECORD_ID, json_data: initialData }]);
+
+            if (error) {
+                console.error('创建初始数据失败:', error);
+            }
+        }
+
+        /**
+         * 3. 更新（覆盖）整个JSON数据
+         * @param {Object} newJsonData - 全新的JSON数据对象
+         */
+        async function updateEntireJson(newJsonData) {
+            const { error } = await supabase
+                .from('shared_data')
+                .update({ json_data: newJsonData, updated_at: new Date().toISOString() })
+                .eq('id', DATA_RECORD_ID);
+
+            if (error) {
+                console.error('更新数据失败:', error);
+                return false;
+            }
+            console.log('数据已更新');
+            return true;
+        }
+
+        /**
+         * 4. 【推荐】使用PostgreSQL的jsonb_set智能更新JSON的特定字段
+         * 避免覆盖整个大对象，只修改需要改的部分
+         * @param {string} path - JSON路径，如 'notes', 'counters.count'
+         * @param {any} newValue - 要设置的新值
+         */
+        async function updateJsonField(path, newValue) {
+            // 将路径字符串转换为PostgreSQL jsonb_set所需的格式
+            const pathArray = path.split('.').map(p => `"${p}"`).join(',');
+            
+            // 使用Supabase的rpc（远程过程调用）执行数据库函数
+            const { error } = await supabase.rpc('update_json_field', {
+                record_id: DATA_RECORD_ID,
+                data_path: `{${pathArray}}`,
+                new_value: newValue
+            });
+
+            if (error) {
+                console.error('更新字段失败:', error);
+                // 如果函数不存在，需要先创建（见下文说明）
+                if (error.code === '42883') {
+                    console.log('请先在Supabase SQL编辑器中创建update_json_field函数');
+                }
+            }
+        }
+
+        /**
+         * 5. 【关键】设置实时监听
+         * 当任何终端修改了我们的数据时，所有打开的网页都会自动收到通知
+         */
+        function setupRealtimeListener() {
+            const channel = supabase
+                .channel('shared-json-updates') // 频道名称可自定义
+                .on('postgres_changes',
+                    {
+                        event: '*', // 监听所有事件 (INSERT, UPDATE, DELETE)
+                        schema: 'public',
+                        table: 'shared_data',
+                        filter: `id=eq.${DATA_RECORD_ID}` // 只监听id=1的这条记录
+                    },
+                    (payload) => {
+                        console.log('数据发生变更！', payload);
+                        // 当收到变更通知时，触发页面更新
+                        onDataChanged(payload.new.json_data);
+                    }
+                )
+                .subscribe();
+
+            return channel;
+        }
+
+        /**
+         * 6. 当收到实时更新时，触发的回调函数
+         * 你需要根据你的网页逻辑来实现这个函数
+         * @param {Object} newData - 最新的JSON数据
+         */
+        function onDataChanged(newData) {
+            console.log('收到最新数据:', newData);
+            // 这里你需要写代码来更新你的网页界面
+            // 例如：
+            // document.getElementById('displayArea').innerHTML = JSON.stringify(newData, null, 2);
+            // 或者更新特定的UI组件
+            alert('数据已更新，请刷新页面或执行相应操作！');
+        }
+
+        /**
+         * 7. 页面初始化
+         */
+        async function initApp() {
+            // 加载初始数据
+            const data = await loadSharedJson();
+            if (data) {
+                console.log('当前共享数据:', data.json_data);
+                // 在这里初始化你的页面，将数据显示出来
+                // renderData(data.json_data);
+            }
+            
+            // 启动实时监听
+            setupRealtimeListener();
+            console.log('实时监听已启动，任何终端的数据变更都会同步到此页面。');
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+
+    <!-- 多终端共享JSON数据实验界面 -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">多终端共享JSON数据实验</h2>
+            
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">当前共享数据：</h3>
+                <pre id="json-display" class="bg-gray-50 p-4 rounded-lg border border-gray-200 overflow-x-auto text-sm">加载中...</pre>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">操作区</h3>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="addNewNote()" class="btn btn-primary">
+                        <i class="fa fa-plus mr-2"></i>添加一条新笔记
+                    </button>
+                    <button onclick="incrementCounter()" class="btn btn-success">
+                        <i class="fa fa-arrow-up mr-2"></i>增加计数器
+                    </button>
+                    <button onclick="resetData()" class="btn btn-danger">
+                        <i class="fa fa-refresh mr-2"></i>重置为初始数据
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <h4 class="text-md font-semibold text-gray-700 mb-3">手动编辑JSON（高级）</h4>
+                <textarea id="json-edit" class="w-full h-48 p-3 border border-gray-300 rounded-lg text-sm font-mono" placeholder="在此编辑JSON数据..."></textarea>
+                <div class="mt-3">
+                    <button onclick="saveManualEdit()" class="btn btn-secondary">
+                        <i class="fa fa-save mr-2"></i>保存修改
+                    </button>
+                </div>
+            </div>
         </div>
-    </body>
-</html>
+    </div>
+
+    <script>
+    // 与上面函数配合的界面操作函数示例
+    async function refreshDisplay() {
+        const data = await loadSharedJson();
+        if (data) {
+            document.getElementById('json-display').textContent = 
+                JSON.stringify(data.json_data, null, 2);
+            document.getElementById('json-edit').value = 
+                JSON.stringify(data.json_data, null, 2);
+        }
+    }
+
+    async function addNewNote() {
+        const data = await loadSharedJson();
+        const newNote = {
+            id: Date.now(),
+            content: prompt('请输入笔记内容：'),
+            time: new Date().toLocaleString()
+        };
+        
+        // 更新 notes 数组
+        const updatedNotes = [...(data.json_data.notes || []), newNote];
+        await updateJsonField('notes', updatedNotes);
+        refreshDisplay();
+    }
+
+    async function incrementCounter() {
+        const data = await loadSharedJson();
+        const current = data.json_data.counters?.count || 0;
+        await updateJsonField('counters.count', current + 1);
+        refreshDisplay();
+    }
+
+    async function resetData() {
+        if (confirm('确定要重置所有数据吗？')) {
+            await createInitialJson();
+            refreshDisplay();
+        }
+    }
+
+    async function saveManualEdit() {
+        try {
+            const newJson = JSON.parse(document.getElementById('json-edit').value);
+            await updateEntireJson(newJson);
+            alert('保存成功！');
+        } catch(e) {
+            alert('JSON格式错误：' + e.message);
+        }
+    }
+
+    // 修改onDataChanged函数以刷新显示
+    function onDataChanged(newData) {
+        document.getElementById('json-display').textContent = 
+            JSON.stringify(newData, null, 2);
+        document.getElementById('json-edit').value = 
+            JSON.stringify(newData, null, 2);
+        // 可以添加更友好的提示，比如一个淡入淡出的"数据已更新"提示条
+    }
+
+    // 初始化显示
+    refreshDisplay();
+    </script>
+        
+        <div class="fixed bottom-4 right-4 bg-white bg-opacity-80 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-gray-600 shadow-sm border border-gray-200">
+            版本号: v305
+        </div>
+    
+</body><!-- 版本号显示 --></html>
