@@ -420,7 +420,7 @@
                         </button>
                         <button id="time-analysis-btn" class="btn btn-sm btn-success flex items-center space-x-1">
                             <i class="fa fa-calendar"></i>
-                            <span>时间花费统计</span>
+                            <span>按时间花费统计</span>
                         </button>
                         <div class="relative">
                             <button id="import-export-btn" class="btn btn-sm btn-secondary flex items-center space-x-1">
@@ -710,7 +710,7 @@
 
     <!-- 预算分析模态框 -->
     <div id="budget-analysis-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 transform transition-all">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto modal-scrollable transform transition-all p-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">分类价格统计</h3>
                 <div class="flex items-center space-x-2">
@@ -746,7 +746,7 @@
 
     <!-- 时间花费统计模态框 -->
     <div id="time-analysis-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 transform transition-all">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto modal-scrollable transform transition-all p-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">时间花费统计</h3>
                 <button class="close-modal text-gray-400 hover:text-gray-600">
